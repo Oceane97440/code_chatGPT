@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Feuille de Calcul Dynamique</title>
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Feuille de Calcul Dynamique</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Billet</th>
+        <th>Nombre de Billets</th>
+        <th>Valeur</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Billet 5€</td>
+        <td><input type="number" class="form-control billet5" min="0"></td>
+        <td><input type="text" class="form-control valeur5" readonly></td>
+      </tr>
+      <tr>
+        <td>Billet 10€</td>
+        <td><input type="number" class="form-control billet10" min="0"></td>
+        <td><input type="text" class="form-control valeur10" readonly></td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td><input type="text" class="form-control totalBillets" readonly></td>
+        <td><input type="text" class="form-control totalValeur" readonly></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Fonction pour mettre à jour les valeurs automatiquement
+    function updateValues() {
+      var billet5 = parseInt($('.billet5').val()) || 0;
+      var billet10 = parseInt($('.billet10').val()) || 0;
+
+      var valeur5 = billet5 * 5;
+      var valeur10 = billet10 * 10;
+
+      $('.valeur5').val(valeur5 + '€');
+      $('.valeur10').val(valeur10 + '€');
+
+      var totalBillets = billet5 + billet10;
+      var totalValeur = valeur5 + valeur10;
+
+      $('.totalBillets').val(totalBillets);
+      $('.totalValeur').val(totalValeur + '€');
+    }
+
+    // Appeler la fonction lorsqu'un champ de saisie change
+    $('.billet5, .billet10').on('input', function() {
+      updateValues();
+    });
+  });
+</script>
+
+</body>
+</html>

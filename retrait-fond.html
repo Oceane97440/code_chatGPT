@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande de retrait d'argent</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+</head>
+<body class="container mt-5">
+
+    <div class="form-group">
+        <label for="lieuRetrait">Lieu de retrait :</label>
+        <select id="lieuRetrait" class="form-control">
+            <option disabled selected   >Choisir une option</option>
+            <option value="agence1">Agence 1</option>
+            <option value="agence2">Agence 2</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="dateRetrait">Date du retrait :</label>
+        <input type="text" id="dateRetrait" placeholder="Sélectionnez une date" class="form-control">
+    </div>
+
+    <script>
+        function addWeekdays(date, days) {
+            for (let i = 0; i < days; i++) {
+                date.setDate(date.getDate() + 1);
+                while (date.getDay() === 0 || date.getDay() === 6) {
+                    date.setDate(date.getDate() + 1);
+                }
+            }
+            return date;
+        }
+
+        $(document).ready(function(){
+            $('#lieuRetrait').change(function(){
+                var selectedLieu = $(this).val();
+                var dateInput = $('#dateRetrait');
+                var currentDate = new Date();
+                var jPlus5Date = addWeekdays(new Date(), 4); //J+4 de la date du jour
+
+                // Détruire l'instance précédente de flatpickr s'il y en a une
+                if (dateInput.data('flatpickr')) {
+                    dateInput.flatpickr().destroy();
+                }
+
+                // Configurer flatpickr avec la plage de dates restreinte
+                dateInput.flatpickr({
+                    enableTime: true,
+                    minDate: jPlus5Date,
+                    maxDate: new Date().fp_incr(35), // 5 semaines à partir d'aujourd'hui
+                    disable: [
+                        function(date) {
+                            // Désactiver les jours qui ne sont pas autorisés pour chaque agence
+                            if (selectedLieu === 'agence1') {
+                                return (date.getDay() !== 2 && date.getDay() !== 4); // mardi et jeudi
+                            } else if (selectedLieu === 'agence2') {
+                                return (date.getDay() !== 1 && date.getDay() !== 5); // lundi et vendredi
+                            }
+                        }
+                    ],
+                    maxTime: "09:00", // Ajuster l'heure maximale en fonction de l'agence
+                    dateFormat: "Y-m-dTH:i",
+                    locale: "fr"
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
